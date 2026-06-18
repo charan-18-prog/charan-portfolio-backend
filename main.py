@@ -7,9 +7,10 @@ app = FastAPI()
 # ✅ FINAL CORS FIX (live frontend + localhost)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://charan-portfolio-q59i.vercel.app",
-        "http://localhost:3000",
+  allow_origins=[
+    "https://charan-portfolio-q59i.vercel.app",
+    "https://charan-portfolio-q59i-gcpdq3e9j-charan-18-progs-projects.vercel.app",
+    "http://localhost:3000",
     ],
     allow_credentials=True,
     allow_methods=["*"],
