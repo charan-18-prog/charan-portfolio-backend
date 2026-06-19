@@ -1,8 +1,24 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
+import os
+
+# Email configuration
+
 
 app = FastAPI()
+
+conf = ConnectionConfig(
+    MAIL_USERNAME=os.getenv("MAIL_USERNAME"),
+    MAIL_PASSWORD=os.getenv("MAIL_PASSWORD"),
+    MAIL_FROM=os.getenv("MAIL_FROM"),
+    MAIL_PORT=int(os.getenv("MAIL_PORT")),
+    MAIL_SERVER=os.getenv("MAIL_SERVER"),
+    MAIL_STARTTLS=True,
+    MAIL_SSL_TLS=False,
+    USE_CREDENTIALS=True,
+)
 
 # ✅ FINAL CORS FIX (live frontend + localhost)
 app.add_middleware(
@@ -74,7 +90,25 @@ def get_projects():
 
 
 # ---------- Contact API ----------
+# ---------- Contact API ----------
 @app.post("/contact")
-def save_contact(contact: Contact):
-    print("New Message:", contact)
+async def save_contact(contact: Contact):
+
+    message = MessageSchema(
+        subject="New Portfolio Contact Form Message",
+        recipients=["muraricharan2@gmail.com"],
+        body=f"""
+Name: {contact.name}
+
+Email: {contact.email}
+
+Message:
+{contact.message}
+""",
+        subtype="plain",
+    )
+
+    fm = FastMail(conf)
+    await fm.send_message(message)
+
     return {"message": "Message received successfully"}
