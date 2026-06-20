@@ -41,9 +41,6 @@ class Contact(BaseModel):
 
 
 # ---------- Home Route ----------
-@app.get("/")
-def home():
-    return {"message": "Hello Charan"}
 
 
 # ---------- Projects API ----------
